@@ -16,6 +16,7 @@ public class StudentClient extends JFrame implements ActionListener {
 
     private JPanel insertTitlePanel = new JPanel();
     private JPanel insertDetailPanel = new JPanel();
+    private JPanel[] insertComponentPanel = new JPanel[4];
 
     private JLabel title = new JLabel("학생관리프로그램");
     private JLabel insertTitle = new JLabel("등록하기");
@@ -26,13 +27,10 @@ public class StudentClient extends JFrame implements ActionListener {
     private JButton[] mainBtn = new JButton[5];
 
     private String[] mainBtnText = {"등록하기","조회하기","내보내기","불러오기","종료하기"};
-    private String[] insertLabel = {"학번 : ","이름 : ","과목 : ","점수 : "};
+    private String[] insertLabel = {"학번","이름","과목","점수"};
 
     private Font btnFont = new Font("맑은 고딕", Font.BOLD, 12);
     private Font subTitleFont = new Font("맑은 고딕", Font.BOLD, 24);
-
-    private int insertX = 0;
-    private int insertY = 0;
 
     StudentClient(){
         this.setTitle("학생관리프로그램");
@@ -74,15 +72,17 @@ public class StudentClient extends JFrame implements ActionListener {
         insertPanel.add(insertTitlePanel, BorderLayout.NORTH);
         insertTitlePanel.add(insertTitle);
         insertPanel.add(insertDetailPanel, BorderLayout.CENTER);
-        insertDetailPanel.setLayout(null);
+        insertDetailPanel.setLayout(new BoxLayout(insertDetailPanel, BoxLayout.LINE_AXIS));
         for(int i = 0; i < 4; i++){
+            insertComponentPanel[i] = new JPanel();
             insertTextField[i] = new JTextField(10);
-            insertTextField[i].setBounds(100,100,100,100);
+            insertTextField[i].setFont(new Font("맑은 고딕", Font.PLAIN, 12));
             insertDetailLabel[i] = new JLabel();
             insertDetailLabel[i].setText(insertLabel[i]);
-            insertDetailLabel[i].setBounds(100,100,100,100);
-            insertDetailPanel.add(insertDetailLabel[i]);
-            insertDetailPanel.add(insertTextField[i]);
+            insertDetailLabel[i].setFont(new Font("맑은 고딕",Font.BOLD, 12));
+            insertComponentPanel[i].add(insertDetailLabel[i]);
+            insertComponentPanel[i].add(insertTextField[i]);
+            insertDetailPanel.add(insertComponentPanel[i]);
         }
         mainPanel.add(insertPanel);
 
@@ -107,6 +107,26 @@ public class StudentClient extends JFrame implements ActionListener {
             titlePanel.setVisible(false);
             insertPanel.setVisible(true);
             searchPanel.setVisible(false);
+            selectBtn(0);
+        }
+        else if(e.getActionCommand().equals("조회하기")){
+            titlePanel.setVisible(false);
+            insertPanel.setVisible(false);
+            searchPanel.setVisible(true);
+            selectBtn(1);
+        }
+        else if(e.getActionCommand().equals("내보내기")){
+            selectBtn(2);
+        }
+    }
+
+    public void selectBtn(int idx) {
+        for(int i = 0; i < mainBtn.length; i++){
+            if(i == idx){
+                mainBtn[i].setBackground(Color.black);
+            } else {
+                mainBtn[i].setBackground(Color.lightGray);
+            }
         }
     }
 }
