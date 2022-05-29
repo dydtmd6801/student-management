@@ -4,9 +4,9 @@ import java.sql.*;
 
 public class JdbcUtil {
     public static Connection getConnection() {
-        String server = "";
-        String userId = "";
-        String passwd = "";
+        String server = "jdbc:mysql://localhost:3306/spring?useSSL=false";
+        String userId = "root";
+        String passwd = "abc123";
 
         try{
             Class.forName("com.mysql.jdbc.Driver");
