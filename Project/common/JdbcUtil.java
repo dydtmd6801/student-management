@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class JdbcUtil {
     public static Connection getConnection() {
-        String server = "jdbc:mysql://localhost:3306/spring?useSSL=false";
+        String server = "jdbc:mysql://localhost:3306/java_project?useSSL=false";
         String userId = "root";
         String passwd = "abc123";
 

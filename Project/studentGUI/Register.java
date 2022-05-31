@@ -27,9 +27,9 @@ public class Register {
 
     private void registerDesign(){
         registerPanel.setLayout(null);
-        registerPanel.setBounds(0,0,500,560);
+        registerPanel.setBounds(0,0,500,430);
         centerPanel.setLayout(null);
-        centerPanel.setBounds(130,80,240,340);
+        centerPanel.setBounds(130,24,240,340);
         centerPanel.setBackground(Color.white);
         userNameText.setBounds(40,30, 160, 15);
         userNameText.setFont(textFieldFont);

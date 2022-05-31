@@ -1,34 +1,35 @@
 package Project.studentGUI;
 
+import Project.StudentDAO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Main extends JFrame implements ActionListener {
-    private TextDataCheck textDataCheck;
+    private TextDataCheck textDataCheck = null;
 
     private Login login = new Login();
     private Register register = new Register();
+    private StudentDAO dao = new StudentDAO();
 
     private JPanel loginPanel = new JPanel();
     private JPanel registerPanel = new JPanel();
 
-    private String userIdData;
     private StringBuffer userPwData = new StringBuffer();
     private StringBuffer userPwCheck = new StringBuffer();
-    private String schoolData;
-    private String userPwDataString;
-    private String userPwCheckString;
 
     private char[] userPw;
     private char[] userCheck;
+
+    private int regiState;
     Main(){
         this.setTitle("학생관리프로그램");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.formDesign();
         this.eventHandler();
-        this.setSize(500,560);
+        this.setSize(500,430);
         this.setVisible(true);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -86,16 +87,11 @@ public class Main extends JFrame implements ActionListener {
                 textDataCheck.setVisible(true);
                 return;
             }
-            userIdData = register.getUserNameData().getText();
             if(register.getPassWordData().getPassword().length == 0 || register.getPassWordData().getPassword() == null){
                 threadSleep();
                 textDataCheck = new TextDataCheck(this,"","pw");
                 textDataCheck.setVisible(true);
                 return;
-            }
-            userPw = register.getPassWordData().getPassword();
-            for(int i = 0; i < userPw.length; i++){
-                userPwData.append(userPw[i]);
             }
             if(register.getPassWordDataCheck().getPassword().length == 0 || register.getPassWordDataCheck().getPassword() == null){
                 threadSleep();
@@ -103,32 +99,45 @@ public class Main extends JFrame implements ActionListener {
                 textDataCheck.setVisible(true);
                 return;
             }
-            userCheck = register.getPassWordDataCheck().getPassword();
-            for(int i = 0; i < userCheck.length; i++){
-                userPwCheck.append(userCheck[i]);
-            }
             if(register.getSchoolInfoData().getText().length() == 0 || register.getSchoolInfoData().getText() == null){
                 threadSleep();
                 textDataCheck = new TextDataCheck(this,"","school");
                 textDataCheck.setVisible(true);
                 return;
             }
-            schoolData = register.getSchoolInfoData().getText();
-
-            userPwDataString = userPwData.toString();
-            userPwCheckString = userPwCheck.toString();
-
-            if(userPwDataString.equals(userPwCheckString)){
-                //DB 커넥트
+            userPw = register.getPassWordData().getPassword();
+            for(int i = 0; i < userPw.length; i++){
+                userPwData.append(userPw[i]);
             }
-
+            userCheck = register.getPassWordDataCheck().getPassword();
+            for(int i = 0; i < userCheck.length; i++){
+                userPwCheck.append(userCheck[i]);
+            }
+            if(!userPwData.toString().equals(userPwCheck.toString())){
+                threadSleep();
+                textDataCheck = new TextDataCheck(this,"","not_match");
+                textDataCheck.setVisible(true);
+                userPwData = new StringBuffer();
+                userPwCheck = new StringBuffer();
+                return;
+            }
+            regiState = dao.registerUser(register);
+            if(regiState == 2) {
+                threadSleep();
+                textDataCheck = new TextDataCheck(this, "", "sql_error");
+                textDataCheck.setVisible(true);
+            } else if (regiState == 1){
+                threadSleep();
+                textDataCheck = new TextDataCheck(this,"","register");
+                textDataCheck.setVisible(true);
+                loginPanel.setVisible(true);
+                registerPanel.setVisible(false);
+                dao.initRegister(register);
+            }
         } else if(e.getActionCommand().equals("취소")){
             loginPanel.setVisible(true);
             registerPanel.setVisible(false);
-            register.getUserNameData().setText("");
-            register.getPassWordData().setText("");
-            register.getPassWordDataCheck().setText("");
-            register.getSchoolInfoData().setText("");
+            dao.initRegister(register);
         }
     }
 }

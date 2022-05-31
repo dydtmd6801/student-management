@@ -24,9 +24,9 @@ public class Login {
 
     private void loginDesign() {
         loginPanel.setLayout(null);
-        loginPanel.setBounds(0,0,500,560);
+        loginPanel.setBounds(0,0,500,430);
         centerPanel.setLayout(null);
-        centerPanel.setBounds(130,140,240,210);
+        centerPanel.setBounds(130,80,240,210);
         centerPanel.setBackground(Color.white);
         userNameText.setBounds(40,30, 160, 15);
         userNameText.setFont(textFieldFont);
