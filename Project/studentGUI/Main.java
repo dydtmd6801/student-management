@@ -1,6 +1,7 @@
 package Project.studentGUI;
 
 import Project.StudentDAO;
+import Project.common.JdbcUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +25,7 @@ public class Main extends JFrame implements ActionListener {
     private char[] userCheck;
 
     private int regiState;
+    private int loginState;
     Main(){
         this.setTitle("학생관리프로그램");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,7 +76,16 @@ public class Main extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().equals("로그인")){
-
+            loginState = dao.checkUser(login);
+            if(loginState == 1){
+                threadSleep();
+                textDataCheck = new TextDataCheck(this, "","login_Success");
+                textDataCheck.setVisible(true);
+            } else if(loginState == 2){
+                threadSleep();
+                textDataCheck = new TextDataCheck(this,"","login_fail");
+                textDataCheck.setVisible(true);
+            }
         } else if(e.getActionCommand().equals("회원가입")){
             loginPanel.setVisible(false);
             registerPanel.setVisible(true);

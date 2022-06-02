@@ -21,6 +21,10 @@ class TextDataCheck extends JDialog {
             state = new JLabel("회원가입이 완료되었습니다!", JLabel.CENTER);
         } else if (context.equals("sql_error")){
             state = new JLabel("아이디가 중복입니다!", JLabel.CENTER);
+        } else if (context.equals("login_Success")){
+            state = new JLabel("로그인이 되었습니다!", JLabel.CENTER);
+        } else if (context.equals("login_fail")){
+            state = new JLabel("로그인 정보가 맞지않습니다!", JLabel.CENTER);
         }
         setLayout(new BorderLayout());
         setSize(200, 100);
