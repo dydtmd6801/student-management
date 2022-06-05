@@ -14,12 +14,14 @@ public class Main extends JFrame implements ActionListener {
     private Register register = new Register();
     private Select select = new Select();
     private Insert insert = new Insert();
+    private PersonInfo personInfo = new PersonInfo();
     private StudentDAO dao = new StudentDAO();
 
     private JPanel loginPanel = new JPanel();
     private JPanel registerPanel = new JPanel();
     private JPanel selectPanel = new JPanel();
     private JPanel insertPanel = new JPanel();
+    private JPanel personInfoPanel = new JPanel();
 
     private StringBuffer userPwData = new StringBuffer();
     private StringBuffer userPwCheck = new StringBuffer();
@@ -58,6 +60,10 @@ public class Main extends JFrame implements ActionListener {
         insertPanel.setLayout(null);
         insertPanel.setVisible(false);
         insertPanel.add(insert.getInsertPanel());
+        this.add(personInfoPanel);
+        personInfoPanel.setLayout(null);
+        personInfoPanel.setVisible(true);
+        personInfoPanel.add();
     }
 
     private void eventHandler() {
@@ -191,7 +197,22 @@ public class Main extends JFrame implements ActionListener {
             System.exit(0);
             return;
         } else if(e.getActionCommand().equals("정보등록")){
-
+            for(int i = 0; i < insert.getInsertData().length; i++){
+                if(insert.getInsertData()[i].getText() == null || insert.getInsertData()[i].getText().length() == 0){
+                    threadSleep();
+                    textDataCheck = new TextDataCheck(this,"",Integer.toString(i));
+                    textDataCheck.setVisible(true);
+                    return;
+                }
+            }
+            dao.insertData(insert);
+            loginPanel.setVisible(false);
+            registerPanel.setVisible(false);
+            selectPanel.setVisible(true);
+            insertPanel.setVisible(false);
+            for(int i = 0; i < insert.getInsertData().length; i++){
+                insert.getInsertData()[i].setText("");
+            }
         } else if(e.getActionCommand().equals("돌아가기")){
             loginPanel.setVisible(false);
             registerPanel.setVisible(false);

@@ -25,6 +25,14 @@ class TextDataCheck extends JDialog {
             state = new JLabel("로그인이 되었습니다!", JLabel.CENTER);
         } else if (context.equals("login_fail")){
             state = new JLabel("로그인 정보가 맞지않습니다!", JLabel.CENTER);
+        } else if (context.equals("0")){
+            state = new JLabel("학번을 입력해주세요!", JLabel.CENTER);
+        } else if (context.equals("1")){
+            state = new JLabel("이름을 입력해주세요!", JLabel.CENTER);
+        } else if (context.equals("2")){
+            state = new JLabel("과목을 입력해주세요!", JLabel.CENTER);
+        } else if (context.equals("3")){
+            state = new JLabel("점수를 입력해주세요!", JLabel.CENTER);
         }
         setLayout(new BorderLayout());
         setSize(200, 100);

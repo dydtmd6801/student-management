@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class StudentDAO {
+    public static String schoolInfo;
+
     private Connection conn = null;
     private ResultSet rs = null;
     private PreparedStatement stmt = null;
@@ -21,16 +23,13 @@ public class StudentDAO {
 
     private final String USER_REGISTER = "INSERT INTO adminuser (id,pw,school) VALUES (?,?,?)";
     private final String USER_CHECK = "SELECT * FROM adminuser where id=? and pw=?";
-
-    public StudentDAO() {
-    }
+    private final String USER_INSERT = "INSERT INTO student (id, name, subject, score, school) VALUES (?,?,?,?,?)";
 
     public int registerUser(Register register){
         try {
             conn = JdbcUtil.getConnection();
             stmt = conn.prepareStatement(USER_REGISTER);
             stmt.setString(1,register.getUserNameData().getText());
-            System.out.println(register.getUserNameData().getText());
             passWord = register.getPassWordData().getPassword();
             passWordData = new StringBuffer();
             for(int i = 0; i < passWord.length; i++){
@@ -38,7 +37,6 @@ public class StudentDAO {
             };
             stmt.setString(2,passWordData.toString());
             stmt.setString(3,register.getSchoolInfoData().getText());
-            System.out.println(stmt);
             stmt.executeUpdate();
             return 1;
         } catch (SQLException e) {
@@ -62,8 +60,8 @@ public class StudentDAO {
     }
 
     public int checkUser(Login login){
-        conn = JdbcUtil.getConnection();
         try {
+            conn = JdbcUtil.getConnection();
             stmt = conn.prepareStatement(USER_CHECK);
             stmt.setString(1, login.getUserNameData().getText());
             loginPassWd = login.getPassWordData().getPassword();
@@ -74,6 +72,7 @@ public class StudentDAO {
             stmt.setString(2,loginPassWdData.toString());
             rs = stmt.executeQuery();
             if(rs.next()){
+                schoolInfo = rs.getString("SCHOOL");
                 return 1;
             } else {
                 return 2;
@@ -84,5 +83,21 @@ public class StudentDAO {
             JdbcUtil.close(rs, stmt, conn);
         }
         return 0;
+    }
+
+    public void insertData(Insert insert){
+        try {
+            conn = JdbcUtil.getConnection();
+            stmt = conn.prepareStatement(USER_INSERT);
+            for(int i = 0; i < insert.getInsertData().length; i++){
+                stmt.setString(i + 1, insert.getInsertData()[i].getText());
+            }
+            stmt.setString(5, schoolInfo);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtil.close(stmt, conn);
+        }
     }
 }
