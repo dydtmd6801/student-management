@@ -54,7 +54,7 @@ public class Register {
 
         for(int i = 0; i < registerBtn.length; i++) {
             registerBtn[i] = new JButton(btnText[i]);
-            registerBtn[i].setBounds(posX, 275, 70, 25);
+            registerBtn[i].setBounds(posX, 278, 70, 25);
             posX += 90;
             registerBtn[i].setFont(new Font("한컴 고딕", Font.PLAIN, 9));
             registerBtn[i].setFocusPainted(false);

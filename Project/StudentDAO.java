@@ -1,10 +1,10 @@
 package Project;
 
 import Project.common.JdbcUtil;
+import Project.studentGUI.Insert;
 import Project.studentGUI.Login;
 import Project.studentGUI.Register;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,6 +53,12 @@ public class StudentDAO {
         register.getPassWordData().setText("");
         register.getPassWordDataCheck().setText("");
         register.getSchoolInfoData().setText("");
+    }
+
+    public void initInsert(Insert insert){
+        for(int i = 0; i < insert.getInsertData().length; i++){
+            insert.getInsertData()[i].setText("");
+        }
     }
 
     public int checkUser(Login login){

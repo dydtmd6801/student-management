@@ -1,7 +1,6 @@
 package Project.studentGUI;
 
 import Project.StudentDAO;
-import Project.common.JdbcUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,10 +12,14 @@ public class Main extends JFrame implements ActionListener {
 
     private Login login = new Login();
     private Register register = new Register();
+    private Select select = new Select();
+    private Insert insert = new Insert();
     private StudentDAO dao = new StudentDAO();
 
     private JPanel loginPanel = new JPanel();
     private JPanel registerPanel = new JPanel();
+    private JPanel selectPanel = new JPanel();
+    private JPanel insertPanel = new JPanel();
 
     private StringBuffer userPwData = new StringBuffer();
     private StringBuffer userPwCheck = new StringBuffer();
@@ -47,6 +50,14 @@ public class Main extends JFrame implements ActionListener {
         registerPanel.setLayout(null);
         registerPanel.setVisible(false);
         registerPanel.add(register.getRegisterPanel());
+        this.add(selectPanel);
+        selectPanel.setLayout(null);
+        selectPanel.setVisible(false);
+        selectPanel.add(select.getBtnPanel());
+        this.add(insertPanel);
+        insertPanel.setLayout(null);
+        insertPanel.setVisible(false);
+        insertPanel.add(insert.getInsertPanel());
     }
 
     private void eventHandler() {
@@ -55,6 +66,12 @@ public class Main extends JFrame implements ActionListener {
         }
         for(int i = 0; i < register.getRegisterBtn().length; i++){
             register.getRegisterBtn()[i].addActionListener(this);
+        }
+        for(int i = 0; i < select.getSelectBtn().length; i++){
+            select.getSelectBtn()[i].addActionListener(this);
+        }
+        for(int i = 0; i < insert.getSubmitBtn().length; i++){
+            insert.getSubmitBtn()[i].addActionListener(this);
         }
     }
 
@@ -85,10 +102,19 @@ public class Main extends JFrame implements ActionListener {
                 threadSleep();
                 textDataCheck = new TextDataCheck(this,"","login_fail");
                 textDataCheck.setVisible(true);
+                return;
             }
+            loginPanel.setVisible(false);
+            registerPanel.setVisible(false);
+            selectPanel.setVisible(true);
+            insertPanel.setVisible(false);
+            login.getUserNameData().setText("");
+            login.getPassWordData().setText("");
         } else if(e.getActionCommand().equals("회원가입")){
             loginPanel.setVisible(false);
             registerPanel.setVisible(true);
+            selectPanel.setVisible(false);
+            insertPanel.setVisible(false);
             login.getUserNameData().setText("");
             login.getPassWordData().setText("");
         } else if(e.getActionCommand().equals("가입하기")){
@@ -143,12 +169,35 @@ public class Main extends JFrame implements ActionListener {
                 textDataCheck.setVisible(true);
                 loginPanel.setVisible(true);
                 registerPanel.setVisible(false);
+                insertPanel.setVisible(false);
                 dao.initRegister(register);
             }
         } else if(e.getActionCommand().equals("취소")){
             loginPanel.setVisible(true);
             registerPanel.setVisible(false);
+            selectPanel.setVisible(false);
+            insertPanel.setVisible(false);
             dao.initRegister(register);
+        } else if(e.getActionCommand().equals("등록하기")){
+            loginPanel.setVisible(false);
+            registerPanel.setVisible(false);
+            selectPanel.setVisible(false);
+            insertPanel.setVisible(true);
+        } else if(e.getActionCommand().equals("조회하기")){
+
+        } else if(e.getActionCommand().equals("개인정보")){
+
+        } else if(e.getActionCommand().equals("종료하기")){
+            System.exit(0);
+            return;
+        } else if(e.getActionCommand().equals("정보등록")){
+
+        } else if(e.getActionCommand().equals("돌아가기")){
+            loginPanel.setVisible(false);
+            registerPanel.setVisible(false);
+            selectPanel.setVisible(true);
+            insertPanel.setVisible(false);
+            dao.initInsert(insert);
         }
     }
 }
