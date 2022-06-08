@@ -35,21 +35,25 @@ public class Register {
         userNameText.setFont(textFieldFont);
         centerPanel.add(userNameText);
         userNameData.setBounds(40,50,160,30);
+        userNameData.setFont(textFieldFont);
         centerPanel.add(userNameData);
         passWordText.setBounds(40,90,160,15);
         passWordText.setFont(textFieldFont);
         centerPanel.add(passWordText);
         passWordData.setBounds(40,110,160,30);
+        passWordData.setFont(textFieldFont);
         centerPanel.add(passWordData);
         passWordTextCheck.setBounds(40,150,160,15);
         passWordTextCheck.setFont(textFieldFont);
         centerPanel.add(passWordTextCheck);
         passWordDataCheck.setBounds(40,170,160,30);
+        passWordDataCheck.setFont(textFieldFont);
         centerPanel.add(passWordDataCheck);
         schoolInfoText.setBounds(40,210,160,15);
         schoolInfoText.setFont(textFieldFont);
         centerPanel.add(schoolInfoText);
         schoolInfoData.setBounds(40,230,160,30);
+        schoolInfoData.setFont(textFieldFont);
         centerPanel.add(schoolInfoData);
 
         for(int i = 0; i < registerBtn.length; i++) {

@@ -14,7 +14,7 @@ public class Main extends JFrame implements ActionListener {
     private Register register = new Register();
     private Select select = new Select();
     private Insert insert = new Insert();
-    private PersonInfo personInfo = new PersonInfo();
+    private UserInfo userInfo = new UserInfo();
     private StudentDAO dao = new StudentDAO();
 
     private JPanel loginPanel = new JPanel();
@@ -31,6 +31,7 @@ public class Main extends JFrame implements ActionListener {
 
     private int regiState;
     private int loginState;
+    private int insertState;
     Main(){
         this.setTitle("학생관리프로그램");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,8 +63,8 @@ public class Main extends JFrame implements ActionListener {
         insertPanel.add(insert.getInsertPanel());
         this.add(personInfoPanel);
         personInfoPanel.setLayout(null);
-        personInfoPanel.setVisible(true);
-        personInfoPanel.add();
+        personInfoPanel.setVisible(false);
+        personInfoPanel.add(userInfo.getUserInfoPanel());
     }
 
     private void eventHandler() {
@@ -78,6 +79,9 @@ public class Main extends JFrame implements ActionListener {
         }
         for(int i = 0; i < insert.getSubmitBtn().length; i++){
             insert.getSubmitBtn()[i].addActionListener(this);
+        }
+        for(int i = 0; i < userInfo.getUserInfoBtn().length; i++){
+            userInfo.getUserInfoBtn()[i].addActionListener(this);
         }
     }
 
@@ -114,6 +118,7 @@ public class Main extends JFrame implements ActionListener {
             registerPanel.setVisible(false);
             selectPanel.setVisible(true);
             insertPanel.setVisible(false);
+            personInfoPanel.setVisible(false);
             login.getUserNameData().setText("");
             login.getPassWordData().setText("");
         } else if(e.getActionCommand().equals("회원가입")){
@@ -121,6 +126,7 @@ public class Main extends JFrame implements ActionListener {
             registerPanel.setVisible(true);
             selectPanel.setVisible(false);
             insertPanel.setVisible(false);
+            personInfoPanel.setVisible(false);
             login.getUserNameData().setText("");
             login.getPassWordData().setText("");
         } else if(e.getActionCommand().equals("가입하기")){
@@ -176,6 +182,7 @@ public class Main extends JFrame implements ActionListener {
                 loginPanel.setVisible(true);
                 registerPanel.setVisible(false);
                 insertPanel.setVisible(false);
+                personInfoPanel.setVisible(false);
                 dao.initRegister(register);
             }
         } else if(e.getActionCommand().equals("취소")){
@@ -183,42 +190,78 @@ public class Main extends JFrame implements ActionListener {
             registerPanel.setVisible(false);
             selectPanel.setVisible(false);
             insertPanel.setVisible(false);
+            personInfoPanel.setVisible(false);
             dao.initRegister(register);
         } else if(e.getActionCommand().equals("등록하기")){
             loginPanel.setVisible(false);
             registerPanel.setVisible(false);
             selectPanel.setVisible(false);
             insertPanel.setVisible(true);
+            personInfoPanel.setVisible(false);
         } else if(e.getActionCommand().equals("조회하기")){
 
         } else if(e.getActionCommand().equals("개인정보")){
-
+            userInfo.getUserInfoData()[0].setText(StudentDAO.idInfo);
+            userInfo.getUserInfoData()[1].setText(StudentDAO.schoolInfo);
+            userInfo.getUserInfoData()[0].setEditable(false);
+            userInfo.getUserInfoData()[1].setEditable(false);
+            loginPanel.setVisible(false);
+            registerPanel.setVisible(false);
+            selectPanel.setVisible(false);
+            insertPanel.setVisible(false);
+            personInfoPanel.setVisible(true);
         } else if(e.getActionCommand().equals("종료하기")){
             System.exit(0);
             return;
         } else if(e.getActionCommand().equals("정보등록")){
-            for(int i = 0; i < insert.getInsertData().length; i++){
-                if(insert.getInsertData()[i].getText() == null || insert.getInsertData()[i].getText().length() == 0){
+            insertState = dao.overlapCheck(insert);
+            for (int i = 0; i < insert.getInsertData().length; i++) {
+                if (insert.getInsertData()[i].getText() == null || insert.getInsertData()[i].getText().length() == 0) {
                     threadSleep();
-                    textDataCheck = new TextDataCheck(this,"",Integer.toString(i));
+                    textDataCheck = new TextDataCheck(this, "", Integer.toString(i));
                     textDataCheck.setVisible(true);
                     return;
                 }
             }
-            dao.insertData(insert);
-            loginPanel.setVisible(false);
-            registerPanel.setVisible(false);
-            selectPanel.setVisible(true);
-            insertPanel.setVisible(false);
-            for(int i = 0; i < insert.getInsertData().length; i++){
-                insert.getInsertData()[i].setText("");
+            if(insertState == 2){
+                dao.insertData(insert);
+                threadSleep();
+                textDataCheck = new TextDataCheck(this,"","regi_okay");
+                textDataCheck.setVisible(true);
+                loginPanel.setVisible(false);
+                registerPanel.setVisible(false);
+                selectPanel.setVisible(true);
+                insertPanel.setVisible(false);
+                personInfoPanel.setVisible(false);
+                for(int i = 0; i < insert.getInsertData().length; i++){
+                    insert.getInsertData()[i].setText("");
+                }
+            } else if (insertState == 1){
+                threadSleep();
+                textDataCheck = new TextDataCheck(this,"","overlap");
+                textDataCheck.setVisible(true);
             }
         } else if(e.getActionCommand().equals("돌아가기")){
             loginPanel.setVisible(false);
             registerPanel.setVisible(false);
             selectPanel.setVisible(true);
             insertPanel.setVisible(false);
+            personInfoPanel.setVisible(false);
             dao.initInsert(insert);
+        } else if(e.getActionCommand().equals("학교수정")){
+            userInfo.getUserInfoData()[1].setEditable(true);
+            userInfo.getUserInfoData()[1].setText("");
+            userInfo.getUserInfoBtn()[0].setText("수정완료");
+        } else if(e.getActionCommand().equals("수정완료")){
+            if(userInfo.getUserInfoData()[1].getText() == null || userInfo.getUserInfoData()[1].getText().length() == 0){
+                threadSleep();
+                textDataCheck = new TextDataCheck(this,"","not_school");
+                textDataCheck.setVisible(true);
+            } else {
+                dao.updateSchool(userInfo);
+                userInfo.getUserInfoBtn()[0].setText("학교수정");
+                userInfo.getUserInfoData()[1].setEditable(false);
+            }
         }
     }
 }

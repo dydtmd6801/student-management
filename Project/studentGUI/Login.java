@@ -2,8 +2,6 @@ package Project.studentGUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Login {
     private JTextField userNameData = new JTextField(10);
@@ -32,6 +30,7 @@ public class Login {
         userNameText.setFont(textFieldFont);
         centerPanel.add(userNameText);
         userNameData.setBounds(40,50,160,30);
+        userNameData.setFont(textFieldFont);
         centerPanel.add(userNameData);
         passWordText.setBounds(40,90,160,15);
         passWordText.setFont(textFieldFont);

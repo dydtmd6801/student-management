@@ -33,6 +33,12 @@ class TextDataCheck extends JDialog {
             state = new JLabel("과목을 입력해주세요!", JLabel.CENTER);
         } else if (context.equals("3")){
             state = new JLabel("점수를 입력해주세요!", JLabel.CENTER);
+        } else if (context.equals("regi_okay")){
+            state = new JLabel("정보등록이 완료되었습니다!", JLabel.CENTER);
+        } else if (context.equals("overlap")){
+            state = new JLabel("중복된 정보가 있습니다!", JLabel.CENTER);
+        } else if (context.equals("not_school")){
+            state = new JLabel("학교 정보를 입력해주세요!", JLabel.CENTER);
         }
         setLayout(new BorderLayout());
         setSize(200, 100);

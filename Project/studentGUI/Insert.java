@@ -32,6 +32,7 @@ public class Insert {
             labelTitle[i].setBounds(40,posY,160,15);
             posY += 20;
             insertData[i].setBounds(40,posY,160,30);
+            insertData[i].setFont(labelFont);
             posY += 40;
             dataPanel.add(labelTitle[i]);
             dataPanel.add(insertData[i]);
