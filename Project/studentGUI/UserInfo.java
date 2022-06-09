@@ -1,7 +1,5 @@
 package Project.studentGUI;
 
-import Project.StudentDAO;
-
 import javax.swing.*;
 import java.awt.*;
 

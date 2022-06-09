@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 public class Main extends JFrame implements ActionListener {
     private TextDataCheck textDataCheck = null;
+    private InsertConfirm insertConfirm = null;
 
     private Login login = new Login();
     private Register register = new Register();
@@ -32,6 +33,7 @@ public class Main extends JFrame implements ActionListener {
     private int regiState;
     private int loginState;
     private int insertState;
+    private int continueCheck;
     Main(){
         this.setTitle("학생관리프로그램");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -228,13 +230,23 @@ public class Main extends JFrame implements ActionListener {
                 threadSleep();
                 textDataCheck = new TextDataCheck(this,"","regi_okay");
                 textDataCheck.setVisible(true);
-                loginPanel.setVisible(false);
-                registerPanel.setVisible(false);
-                selectPanel.setVisible(true);
-                insertPanel.setVisible(false);
-                personInfoPanel.setVisible(false);
-                for(int i = 0; i < insert.getInsertData().length; i++){
-                    insert.getInsertData()[i].setText("");
+                insertConfirm = new InsertConfirm(this,"","");
+                insertConfirm.setVisible(true);
+                continueCheck = insertConfirm.getConfirmState();
+                if(continueCheck == 1){
+                    for(int i = 0; i < insert.getInsertData().length; i++){
+                        insert.getInsertData()[i].setText("");
+                    }
+                }
+                else if(continueCheck == 2){
+                    loginPanel.setVisible(false);
+                    registerPanel.setVisible(false);
+                    selectPanel.setVisible(true);
+                    insertPanel.setVisible(false);
+                    personInfoPanel.setVisible(false);
+                    for(int i = 0; i < insert.getInsertData().length; i++){
+                        insert.getInsertData()[i].setText("");
+                    }
                 }
             } else if (insertState == 1){
                 threadSleep();
