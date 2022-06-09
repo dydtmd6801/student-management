@@ -226,6 +226,22 @@ public class Main extends JFrame implements ActionListener {
                 }
             }
             if(insertState == 2){
+                try{
+                    int scoreData = Integer.parseInt(insert.getInsertData()[3].getText());
+                    if(scoreData < 0 || scoreData > 101){
+                        threadSleep();
+                        textDataCheck = new TextDataCheck(this,"","score_overflow");
+                        textDataCheck.setVisible(true);
+                        insert.getInsertData()[3].setText("");
+                        return;
+                    }
+                } catch (NumberFormatException n){
+                    threadSleep();
+                    textDataCheck = new TextDataCheck(this,"","not_digit");
+                    textDataCheck.setVisible(true);
+                    insert.getInsertData()[3].setText("");
+                    return;
+                }
                 dao.insertData(insert);
                 threadSleep();
                 textDataCheck = new TextDataCheck(this,"","regi_okay");
