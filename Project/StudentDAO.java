@@ -7,15 +7,12 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
+import java.sql.*;
 
 public class StudentDAO {
     public static String schoolInfo;
     public static String idInfo;
+    public static int allStudent;
 
     private Connection conn = null;
     private ResultSet rs = null;
@@ -25,6 +22,7 @@ public class StudentDAO {
     private char[] loginPassWd;
     private StringBuffer loginPassWdData = new StringBuffer();
     private String[][] studentData;
+    private String[][] filterData;
     private int cnt = 0;
     private int rows = 0;
     private JFileChooser fileChooser = new JFileChooser();
@@ -38,8 +36,11 @@ public class StudentDAO {
     private final String DATA_UPDATE = "UPDATE student SET school=? WHERE school=?";
     private final String STUDENT_DATA = "SELECT * FROM student WHERE school=?";
     private final String STUDENT_COUNT = "SELECT COUNT(*) FROM student WHERE school=?";
+    private final String STUDENT_COUNT_ALL = "SELECT COUNT(DISTINCT name) FROM student WHERE school=?";
     private final String DELETE_DATA = "DELETE FROM student WHERE id=? AND subject=?";
     private final String UPDATE_DATA = "UPDATE student SET id=?, name=?, subject=?, score=? WHERE id=? AND subject=?";
+    private final String FILTER_DATA = "SELECT * FROM student WHERE id=? AND school=?";
+    private final String FILTER_DATA_COUNT = "SELECT COUNT(*) FROM student WHERE id=? AND school=?";
 
     public int registerUser(Register register){
         try {
@@ -187,6 +188,64 @@ public class StudentDAO {
         return null;
     }
 
+    public String[][] filterData(String filter){
+        try{
+            conn = JdbcUtil.getConnection();
+            stmt = conn.prepareStatement(FILTER_DATA_COUNT);
+            stmt.setString(1, filter);
+            stmt.setString(2, schoolInfo);
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                rows = rs.getInt(1);
+            }
+            cnt = 0;
+            studentData = new String[rows][4];
+            stmt = conn.prepareStatement(FILTER_DATA);
+            stmt.setString(1, filter);
+            stmt.setString(2, schoolInfo);
+            rs = stmt.executeQuery();
+            while(rs.next()){
+                studentData[cnt][0] = rs.getString("ID");
+                studentData[cnt][1] = rs.getString("NAME");
+                studentData[cnt][2] = rs.getString("SUBJECT");
+                studentData[cnt][3] = rs.getString("SCORE");
+                cnt++;
+            }
+            return studentData;
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            JdbcUtil.close(rs, stmt, conn);
+        }
+        return null;
+    }
+
+    public String[] averageData(String filter){
+        int sum = 0;
+        String name = new String();
+        String[] outputResult = new String[2];
+        try{
+            conn = JdbcUtil.getConnection();
+            stmt = conn.prepareStatement(FILTER_DATA);
+            stmt.setString(1, filter);
+            stmt.setString(2, schoolInfo);
+            rs = stmt.executeQuery();
+            rs.last();
+            int rowData = rs.getRow();
+            rs.beforeFirst();
+            while(rs.next()){
+                sum += Integer.parseInt(rs.getString("SCORE"));
+                name = rs.getString("NAME");
+            }
+            outputResult[0] = Integer.toString(sum/rowData);
+            outputResult[1] = name;
+            return outputResult;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void deleteData(DefaultTableModel tableModel, JTable table){
         int[] selecteds = table.getSelectedRows();
         int selected = table.getSelectedRow();
@@ -303,5 +362,20 @@ public class StudentDAO {
             JdbcUtil.close(stmt, conn);
         }
         return 0;
+    }
+
+    public void studentAllCount(){
+        try{
+            conn = JdbcUtil.getConnection();
+            stmt = conn.prepareStatement(STUDENT_COUNT_ALL);
+            stmt.setString(1, schoolInfo);
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                System.out.println(rs.getInt(1));
+                allStudent = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

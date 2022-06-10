@@ -11,6 +11,8 @@ public class Main extends JFrame implements ActionListener {
     private TextDataCheck textDataCheck = null;
     private InsertConfirm insertConfirm = null;
     private FileCheck fileCheck = null;
+    private AddFeature addFeature = null;
+    private FilterFeature filterFeature = null;
 
     private Login login = new Login();
     private Register register = new Register();
@@ -39,6 +41,7 @@ public class Main extends JFrame implements ActionListener {
     private int continueCheck;
     private int fileCheckState;
     private int saveState;
+    private int featureState;
     Main(){
         this.setTitle("학생관리프로그램");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -218,6 +221,8 @@ public class Main extends JFrame implements ActionListener {
             personInfoPanel.setVisible(false);
             searchPanel.setVisible(false);
         } else if (e.getActionCommand().equals("조회하기")) {
+            dao.studentAllCount();
+            search.getPeople().setText("총원 : " + StudentDAO.allStudent + "명");
             search.getSchool().setText("학교 : " + StudentDAO.schoolInfo);
             search.setTableModel(dao.studentData());
             loginPanel.setVisible(false);
@@ -253,6 +258,8 @@ public class Main extends JFrame implements ActionListener {
             textDataCheck = new TextDataCheck(this,"","update");
             textDataCheck.setVisible(true);
             dao.updateData(search.getTable());
+            dao.studentAllCount();
+            search.getPeople().setText("총원 : " + StudentDAO.allStudent + "명");
             search.getTable().clearSelection();
             search.getTable().setEnabled(false);
             search.getSearchBtn()[2].setEnabled(false);
@@ -263,6 +270,30 @@ public class Main extends JFrame implements ActionListener {
             textDataCheck = new TextDataCheck(this, "","delete");
             textDataCheck.setVisible(true);
         } else if (e.getActionCommand().equals("부가기능")) {
+            addFeature = new AddFeature(this,"","");
+            addFeature.setVisible(true);
+            featureState = addFeature.getCheckState();
+            if(featureState == 1){
+                filterFeature = new FilterFeature(this,"","search");
+                filterFeature.setVisible(true);
+                if(!filterFeature.getIdData().equals("")){
+                    search.setTableModel(dao.filterData(filterFeature.getIdData()));
+                } else {
+                    threadSleep();
+                    textDataCheck = new TextDataCheck(this, "","no_idData");
+                    textDataCheck.setVisible(true);
+                }
+            } else if(featureState == 2){
+                filterFeature = new FilterFeature(this,"","average");
+                filterFeature.setVisible(true);
+                if(!filterFeature.getIdData().equals("")){
+                    search.setTextArea(dao.averageData(filterFeature.getIdData()));
+                } else {
+                    threadSleep();
+                    textDataCheck = new TextDataCheck(this, "","no_idData");
+                    textDataCheck.setVisible(true);
+                }
+            }
         } else if (e.getActionCommand().equals("파일관리")) {
             fileCheck = new FileCheck(this, "", "");
             fileCheck.setVisible(true);
@@ -277,6 +308,8 @@ public class Main extends JFrame implements ActionListener {
                     threadSleep();
                     textDataCheck = new TextDataCheck(this, "","load_success");
                     textDataCheck.setVisible(true);
+                    dao.studentAllCount();
+                    search.getPeople().setText("총원 : " + StudentDAO.allStudent + "명");
                     search.setTableModel(dao.studentData());
                 }
             } else if(fileCheckState == 2){

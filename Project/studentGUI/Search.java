@@ -35,7 +35,6 @@ public class Search {
         centerPanel.setBounds(55,40,380,320);
         centerPanel.setLayout(null);
         centerPanel.setBackground(Color.white);
-        people.setText("총원 : ");
         people.setFont(textFont);
         people.setBounds(20, 20, 80, 30);
         centerPanel.add(people);
@@ -80,12 +79,19 @@ public class Search {
         return school;
     }
 
+    public JLabel getPeople() {
+        return people;
+    }
+
     public void setTableModel(String[][] studentData){
         tableModel.setNumRows(0);
-        System.out.println(studentData.length);
         for(int i = 0; i < studentData.length; i++){
             tableModel.addRow(studentData[i]);
         }
+    }
+
+    public void setTextArea(String[] data){
+        systemMsg.setText(data[1] + "의 평균 : "+ data[0]);
     }
 
     public JTable getTable(){

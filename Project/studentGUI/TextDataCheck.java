@@ -53,6 +53,8 @@ class TextDataCheck extends JDialog {
             state = new JLabel("불러오기에 성공하였습니다!", JLabel.CENTER);
         } else if (context.equals("update")){
             state = new JLabel("수정되었습니다!", JLabel.CENTER);
+        } else if (context.equals("no_idData")){
+            state = new JLabel("학번을 입력하지 않았습니다!", JLabel.CENTER);
         }
         setLayout(new BorderLayout());
         setSize(200, 100);
