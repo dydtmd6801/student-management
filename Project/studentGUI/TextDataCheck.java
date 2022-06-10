@@ -43,6 +43,16 @@ class TextDataCheck extends JDialog {
             state = new JLabel("숫자를 입력해주세요!", JLabel.CENTER);
         } else if (context.equals("score_overflow")){
             state = new JLabel("점수를 올바르게 입력하세요!", JLabel.CENTER);
+        } else if (context.equals("delete")){
+            state = new JLabel("삭제가 완료되었습니다!", JLabel.CENTER);
+        } else if (context.equals("no_file")){
+            state = new JLabel("파일이 선택되지 않았습니다!", JLabel.CENTER);
+        } else if (context.equals("save_success")){
+            state = new JLabel("정보가 저장되었습니다!", JLabel.CENTER);
+        } else if (context.equals("load_success")){
+            state = new JLabel("불러오기에 성공하였습니다!", JLabel.CENTER);
+        } else if (context.equals("update")){
+            state = new JLabel("수정되었습니다!", JLabel.CENTER);
         }
         setLayout(new BorderLayout());
         setSize(200, 100);
